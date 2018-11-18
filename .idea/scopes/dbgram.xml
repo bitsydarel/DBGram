@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="dbgram" pattern="src:*..*||test:*..*||src[DBGram]:build||src[DBGram]:settings" />
+</component>

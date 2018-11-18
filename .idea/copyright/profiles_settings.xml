@@ -1,0 +1,7 @@
+<component name="CopyrightManager">
+  <settings default="dbeginc">
+    <module2copyright>
+      <element module="dbgram" copyright="dbeginc" />
+    </module2copyright>
+  </settings>
+</component>
