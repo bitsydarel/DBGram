@@ -1,0 +1,87 @@
+plugins {
+    id 'kotlin-multiplatform'
+    id 'com.android.library'
+}
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 28
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    
+    sourceSets {
+        main { 
+            setRoot("src/androidMain")
+            java.srcDirs = ["src/androidMain/kotlin"]
+        }
+        
+        test {
+            setRoot("src/androidTest")
+            java.srcDirs = ["src/androidTest/kotlin"]
+        }
+    }
+}
+
+kotlin {
+    targets {
+        fromPreset(presets.jvm, 'server') {
+            compilations.all {
+                tasks[compileKotlinTaskName].kotlinOptions {
+                    jvmTarget = '1.8'
+                }
+            }
+        }
+        fromPreset(presets.android, 'android')
+        //For ios target (emulator or real device)
+        final def iosTarget = System.getenv("SDK_NAME")?.startsWith("iphoneos") ? presets.iosArm64 : presets.iosX64
+        fromPreset(iosTarget, 'ios')
+    }
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation 'org.jetbrains.kotlin:kotlin-stdlib-common'
+            }
+        }
+        commonTest {
+            dependencies {
+                implementation 'org.jetbrains.kotlin:kotlin-test-common'
+                implementation 'org.jetbrains.kotlin:kotlin-test-annotations-common'
+            }
+        }
+        serverMain {
+            dependencies {
+                implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+            }
+        }
+        serverTest {
+            dependencies {
+                implementation 'org.jetbrains.kotlin:kotlin-test'
+                implementation 'org.jetbrains.kotlin:kotlin-test-junit'
+            }
+        }
+        androidMain {
+            dependencies {
+                implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7'
+            }
+        }
+        androidTest {
+            dependencies {
+                implementation 'org.jetbrains.kotlin:kotlin-test'
+                implementation 'org.jetbrains.kotlin:kotlin-test-junit'
+            }
+        }
+        
+        iosMain {
+        }
+        iosTest {
+        }
+    }
+}
