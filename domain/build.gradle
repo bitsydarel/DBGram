@@ -50,29 +50,38 @@ kotlin {
                 implementation 'org.jetbrains.kotlin:kotlin-stdlib-common'
             }
         }
+        
         commonTest {
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-test-common'
                 implementation 'org.jetbrains.kotlin:kotlin-test-annotations-common'
             }
         }
+        
         serverMain {
+            dependsOn commonMain
             dependencies {
-                implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+                api 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
             }
         }
+        
         serverTest {
+            dependsOn commonTest
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-test'
                 implementation 'org.jetbrains.kotlin:kotlin-test-junit'
             }
         }
+        
         androidMain {
+            dependsOn commonMain
             dependencies {
-                implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7'
+                api 'org.jetbrains.kotlin:kotlin-stdlib-jdk7'
             }
         }
+        
         androidTest {
+            dependsOn commonTest
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-test'
                 implementation 'org.jetbrains.kotlin:kotlin-test-junit'
@@ -80,8 +89,10 @@ kotlin {
         }
         
         iosMain {
+            dependsOn commonMain
         }
         iosTest {
+            dependsOn commonTest
         }
     }
 }

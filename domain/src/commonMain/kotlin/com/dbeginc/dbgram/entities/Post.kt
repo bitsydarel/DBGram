@@ -2,7 +2,7 @@
  *                     GNU GENERAL PUBLIC LICENSE
  *                        Version 3, 29 June 2007
  *
- *  Copyright (C) 2018 Free Software Foundation, Inc. <https://fsf.org/>
+ *  Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
  *  Everyone is permitted to copy and distribute verbatim copies
  *  of this license document, but changing it is not allowed.
  *
@@ -675,20 +675,17 @@
  * <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
 
-package com.dbeginc.dbgram
+package com.dbeginc.dbgram.entities
 
-import android.os.Bundle
-import android.util.Log
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-
-class MainActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        val textView = findViewById<TextView>(R.id.message)
-        textView.text = hello()
-        Log.i("darel", "lol")
-    }
-}
+/**
+ * DBGram User's post.
+ *
+ * @param userId of the owner of this post.
+ * @param title of this post.
+ * @param content of this post.
+ */
+data class Post(
+    val userId: Long,
+    val title: String,
+    val content: String
+)
