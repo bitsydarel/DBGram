@@ -675,38 +675,12 @@
  * <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
 
-plugins {
-    id 'org.jetbrains.kotlin.jvm'
-    id 'org.jetbrains.kotlin.plugin.spring' version('1.3.10')
-    id 'eclipse'
-    id 'org.springframework.boot'
-    id 'io.spring.dependency-management'
+package com.dbeginc.dbgram
+
+actual class Sample {
+    actual fun checkMe() = 12
 }
 
-group = 'com.dbeginc'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = 1.8
-
-compileKotlin {
-	kotlinOptions {
-		freeCompilerArgs = ["-Xjsr305=strict"]
-		jvmTarget = "1.8"
-	}
-}
-compileTestKotlin {
-	kotlinOptions {
-		freeCompilerArgs = ["-Xjsr305=strict"]
-		jvmTarget = "1.8"
-	}
-}
-
-
-dependencies {
-    implementation(project(":domain"))
-	implementation('org.springframework.boot:spring-boot-starter-webflux')
-	implementation('org.springframework.boot:spring-boot-starter-websocket')
-	implementation('com.fasterxml.jackson.module:jackson-module-kotlin')
-	implementation("org.jetbrains.kotlin:kotlin-reflect")
-	testImplementation('org.springframework.boot:spring-boot-starter-test')
-	testImplementation('io.projectreactor:reactor-test')
+actual object Platform {
+    actual val name: String = "Server"
 }
