@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="domain-backend">
+    <output-path>$PROJECT_DIR$/domain/build/libs</output-path>
+    <root id="archive" name="domain-backend.jar">
+      <element id="module-output" name="DBGram.domain.backendMain" />
+    </root>
+  </artifact>
+</component>

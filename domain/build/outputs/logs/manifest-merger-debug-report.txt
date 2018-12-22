@@ -1,0 +1,27 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/darelbitsy/IdeaProjects/DBGram/domain/src/androidMain/AndroidManifest.xml:1:1-5:12
+INJECTED from /Users/darelbitsy/IdeaProjects/DBGram/domain/src/androidMain/AndroidManifest.xml:1:1-5:12
+INJECTED from /Users/darelbitsy/IdeaProjects/DBGram/domain/src/androidMain/AndroidManifest.xml:1:1-5:12
+	package
+		ADDED from /Users/darelbitsy/IdeaProjects/DBGram/domain/src/androidMain/AndroidManifest.xml:2:9-37
+		INJECTED from /Users/darelbitsy/IdeaProjects/DBGram/domain/src/androidMain/AndroidManifest.xml
+		INJECTED from /Users/darelbitsy/IdeaProjects/DBGram/domain/src/androidMain/AndroidManifest.xml
+	xmlns:android
+		ADDED from /Users/darelbitsy/IdeaProjects/DBGram/domain/src/androidMain/AndroidManifest.xml:1:1-5:12
+application
+ADDED from /Users/darelbitsy/IdeaProjects/DBGram/domain/src/androidMain/AndroidManifest.xml:4:5-19
+uses-sdk
+INJECTED from /Users/darelbitsy/IdeaProjects/DBGram/domain/src/androidMain/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/darelbitsy/IdeaProjects/DBGram/domain/src/androidMain/AndroidManifest.xml
+INJECTED from /Users/darelbitsy/IdeaProjects/DBGram/domain/src/androidMain/AndroidManifest.xml
+INJECTED from /Users/darelbitsy/IdeaProjects/DBGram/domain/src/androidMain/AndroidManifest.xml
+INJECTED from /Users/darelbitsy/IdeaProjects/DBGram/domain/src/androidMain/AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from /Users/darelbitsy/IdeaProjects/DBGram/domain/src/androidMain/AndroidManifest.xml
+		ADDED from /Users/darelbitsy/IdeaProjects/DBGram/domain/src/androidMain/AndroidManifest.xml
+		INJECTED from /Users/darelbitsy/IdeaProjects/DBGram/domain/src/androidMain/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /Users/darelbitsy/IdeaProjects/DBGram/domain/src/androidMain/AndroidManifest.xml
+		ADDED from /Users/darelbitsy/IdeaProjects/DBGram/domain/src/androidMain/AndroidManifest.xml
+		INJECTED from /Users/darelbitsy/IdeaProjects/DBGram/domain/src/androidMain/AndroidManifest.xml

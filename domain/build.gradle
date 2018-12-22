@@ -700,7 +700,7 @@ android {
             java.srcDirs = ["src/androidMain/kotlin"]
         }
         
-        androidTest {
+        test {
             setRoot("src/androidTest")
             java.srcDirs = ["src/androidTest/kotlin"]
         }
@@ -719,49 +719,47 @@ kotlin {
         fromPreset(presets.android, 'android')
         //For ios target (emulator or real device)
         final def iosTarget = System.getenv("SDK_NAME")?.startsWith("iphoneos") ? presets.iosArm64 : presets.iosX64
-        fromPreset(iosTarget, 'ios')
+        fromPreset(iosTarget, 'ios') {
+            compilations.main.outputKinds('FRAMEWORK')
+        }
     }
     sourceSets {
         commonMain {
             dependencies {
-                implementation 'org.jetbrains.kotlin:kotlin-stdlib-common'
+                implementation(KotlinDependencies.kotlinStdlibCommon)
             }
         }
         
         commonTest {
             dependencies {
-                implementation 'org.jetbrains.kotlin:kotlin-test-common'
-                implementation 'org.jetbrains.kotlin:kotlin-test-annotations-common'
+                implementation(KotlinDependencies.kotlinTestCommon)
+                implementation(KotlinDependencies.kotlinTestAnnotationCommon)
             }
         }
         
         backendMain {
-            dependsOn commonMain
             dependencies {
-                api 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+                api(KotlinDependencies.kotlinStdlibJdk8)
             }
         }
 
         backendTest {
-            dependsOn commonTest
             dependencies {
-                implementation 'org.jetbrains.kotlin:kotlin-test'
-                implementation 'org.jetbrains.kotlin:kotlin-test-junit'
+                implementation(KotlinDependencies.kotlinTestJvm)
+                implementation(KotlinDependencies.kotlinTestJunitJvm)
             }
         }
         
         androidMain {
-            dependsOn commonMain
             dependencies {
-                api 'org.jetbrains.kotlin:kotlin-stdlib-jdk7'
+                api(KotlinDependencies.kotlinStdlibJdk7)
             }
         }
         
         androidTest {
-            dependsOn commonTest
             dependencies {
-                implementation 'org.jetbrains.kotlin:kotlin-test'
-                implementation 'org.jetbrains.kotlin:kotlin-test-junit'
+                api(KotlinDependencies.kotlinTestJvm)
+                api(KotlinDependencies.kotlinTestJunitJvm)
             }
         }
         
@@ -773,3 +771,28 @@ kotlin {
         }
     }
 }
+
+// workaround for https://youtrack.jetbrains.com/issue/KT-27170
+configurations {
+    compileClasspath
+}
+
+task packForXCode(type: Sync) {
+    final File frameworkDir = new File(buildDir, "xcode-frameworks")
+    final String mode = project.findProperty("XCODE_CONFIGURATION")?.toUpperCase() ?: 'DEBUG'
+
+    inputs.property "mode", mode
+    dependsOn kotlin.targets.ios.compilations.main.linkTaskName("FRAMEWORK", mode)
+
+    from { kotlin.targets.ios.compilations.main.getBinary("FRAMEWORK", mode).parentFile }
+    into frameworkDir
+
+    doLast {
+        new File(frameworkDir, 'gradlew').with {
+            text = "#!/bin/bash\nexport 'JAVA_HOME=${System.getProperty("java.home")}'\ncd '${rootProject.rootDir}'\n./gradlew \$@\n"
+            setExecutable(true)
+        }
+    }
+}
+
+tasks.build.dependsOn packForXCode

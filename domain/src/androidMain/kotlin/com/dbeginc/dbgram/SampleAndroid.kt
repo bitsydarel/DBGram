@@ -7,5 +7,5 @@ actual class Sample {
 }
 
 actual object Platform {
-    actual val name: String = Build.VERSION.BASE_OS.plus(Build.VERSION.CODENAME).plus(Build.VERSION.RELEASE)
+    actual val name: String = "Android"
 }
