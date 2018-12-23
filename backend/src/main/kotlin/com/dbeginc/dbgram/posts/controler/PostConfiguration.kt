@@ -675,108 +675,39 @@
  * <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
 
-/**
- * DBGram kotlin dependencies.
- */
-object KotlinDependencies {
-    /**
-     * Kotlin gradle plugin library.
-     */
-    const val kotlinGradlePlugin: String = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Configurations.kotlinVersion}"
+package com.dbeginc.dbgram.posts.controler
 
-    /**
-     * Kotlin standard common library.
-     */
-    const val kotlinStdlibCommon: String = "org.jetbrains.kotlin:kotlin-stdlib-common"
+import com.dbeginc.dbgram.domain.posts.PostsRepository
+import com.google.cloud.firestore.Firestore
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.http.MediaType
+import org.springframework.web.reactive.function.server.RequestPredicates
+import org.springframework.web.reactive.function.server.RouterFunction
+import org.springframework.web.reactive.function.server.RouterFunctions
+import org.springframework.web.reactive.function.server.ServerResponse
 
-    /**
-     * Kotlin test common library.
-     */
-    const val kotlinTestJvm: String = "org.jetbrains.kotlin:kotlin-test"
+@Configuration
+class PostConfiguration {
+    @Bean
+    fun providePostsRepository(firestore: Firestore): PostsRepository {
+        return PostsRepository(firestore)
+    }
 
-    /**
-     * Kotlin junit test library.
-     */
-    const val kotlinTestJunitJvm: String = "org.jetbrains.kotlin:kotlin-test-junit"
+    @Bean
+    @Autowired
+    fun routeRequests(restController: PostRestController): RouterFunction<ServerResponse> {
+        return RouterFunctions.nest(
+            RequestPredicates.path("/api").and(RequestPredicates.accept(MediaType.APPLICATION_JSON)),
+            postsApiRouterFunctions(restController)
+        )
+    }
 
-    /**
-     * Kotlin test common library.
-     */
-    const val kotlinTestCommon: String = "org.jetbrains.kotlin:kotlin-test-common"
-
-    /**
-     * Kotlin test annotation common library.
-     */
-    const val kotlinTestAnnotationCommon: String = "org.jetbrains.kotlin:kotlin-test-annotations-common"
-
-    /**
-     * Kotlin standard jdk 8 library.
-     */
-    const val kotlinStdlibJdk8: String = "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-
-    /**
-     * Kotlin standard jdk 7 library.
-     */
-    const val kotlinStdlibJdk7: String = "org.jetbrains.kotlin:kotlin-stdlib-jdk7"
-
-    /**
-     * Kotlin reflection library.
-     */
-    const val kotlinReflect: String = "org.jetbrains.kotlin:kotlin-reflect"
-}
-
-/**
- * DBGram Spring dependencies.
- */
-object SpringDependencies {
-    /**
-     * Spring boot gradle plugin.
-     */
-    const val springBootGradlePlugin: String =
-        "org.springframework.boot:spring-boot-gradle-plugin:${Configurations.springBootVersion}"
-
-    /**
-     * Spring boot webflux starter library;
-     */
-    const val springBootWebfluxStarter: String = "org.springframework.boot:spring-boot-starter-webflux"
-
-    /**
-     * Spring boot websocket starter library.
-     */
-    const val springBootWebsocketStarter: String = "org.springframework.boot:spring-boot-starter-websocket"
-
-    /**
-     * Spring boot jackson kotlin module.
-     */
-    const val jacksonKotlinModule: String = "com.fasterxml.jackson.module:jackson-module-kotlin"
-
-    /**
-     * Spring boot test starter library.
-     */
-    const val springBootTestStarter: String = "org.springframework.boot:spring-boot-starter-test"
-
-    /**
-     * Project reactor test library.
-     */
-    const val reactorTest: String = "io.projectreactor:reactor-test"
-}
-
-/**
- * DBGram android framework dependencies.
- */
-object AndroidFrameworkDependencies {
-    /**
-     * Android gradle plugin.
-     */
-    const val androidGradlePlugin: String = "com.android.tools.build:gradle:${Configurations.androidGradlePlugin}"
-}
-
-/**
- * DBGram third party dependencies.
- */
-object ThirdPartyDependencies {
-    /**
-     * Firebase admin sdk library.
-     */
-    const val firebaseAdminSdk: String = "com.google.firebase:firebase-admin:${Configurations.firebaseAdminVersion}"
+    private fun postsApiRouterFunctions(restController: PostRestController): RouterFunction<ServerResponse> {
+        return RouterFunctions.route(
+            RequestPredicates.GET("/posts"),
+            restController.getPosts()
+        )
+    }
 }

@@ -740,6 +740,7 @@ kotlin {
         backendMain {
             dependencies {
                 api(KotlinDependencies.kotlinStdlibJdk8)
+                api(ThirdPartyDependencies.firebaseAdminSdk)
             }
         }
 

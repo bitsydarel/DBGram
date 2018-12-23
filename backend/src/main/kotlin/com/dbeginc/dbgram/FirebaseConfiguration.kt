@@ -675,108 +675,57 @@
  * <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
 
-/**
- * DBGram kotlin dependencies.
- */
-object KotlinDependencies {
-    /**
-     * Kotlin gradle plugin library.
-     */
-    const val kotlinGradlePlugin: String = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Configurations.kotlinVersion}"
+package com.dbeginc.dbgram
 
-    /**
-     * Kotlin standard common library.
-     */
-    const val kotlinStdlibCommon: String = "org.jetbrains.kotlin:kotlin-stdlib-common"
+import com.google.auth.oauth2.GoogleCredentials
+import com.google.cloud.firestore.Firestore
+import com.google.firebase.FirebaseApp
+import com.google.firebase.FirebaseOptions
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.cloud.FirestoreClient
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.util.ResourceUtils
+import java.io.FileInputStream
+import com.google.cloud.firestore.FirestoreOptions
 
-    /**
-     * Kotlin test common library.
-     */
-    const val kotlinTestJvm: String = "org.jetbrains.kotlin:kotlin-test"
 
-    /**
-     * Kotlin junit test library.
-     */
-    const val kotlinTestJunitJvm: String = "org.jetbrains.kotlin:kotlin-test-junit"
-
-    /**
-     * Kotlin test common library.
-     */
-    const val kotlinTestCommon: String = "org.jetbrains.kotlin:kotlin-test-common"
-
-    /**
-     * Kotlin test annotation common library.
-     */
-    const val kotlinTestAnnotationCommon: String = "org.jetbrains.kotlin:kotlin-test-annotations-common"
-
-    /**
-     * Kotlin standard jdk 8 library.
-     */
-    const val kotlinStdlibJdk8: String = "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-
-    /**
-     * Kotlin standard jdk 7 library.
-     */
-    const val kotlinStdlibJdk7: String = "org.jetbrains.kotlin:kotlin-stdlib-jdk7"
-
-    /**
-     * Kotlin reflection library.
-     */
-    const val kotlinReflect: String = "org.jetbrains.kotlin:kotlin-reflect"
-}
 
 /**
- * DBGram Spring dependencies.
+ * DBGram firebase spring configuration.
  */
-object SpringDependencies {
-    /**
-     * Spring boot gradle plugin.
-     */
-    const val springBootGradlePlugin: String =
-        "org.springframework.boot:spring-boot-gradle-plugin:${Configurations.springBootVersion}"
+@Configuration
+class FirebaseConfiguration {
 
     /**
-     * Spring boot webflux starter library;
+     * Provide Firebase app to spring dependency injection graph.
      */
-    const val springBootWebfluxStarter: String = "org.springframework.boot:spring-boot-starter-webflux"
+    @Bean
+    fun provideFirebaseApp(): FirebaseApp {
+        val serviceAccount = FileInputStream(ResourceUtils.getFile("classpath:admin_sdk_config.json"))
+
+        val options = FirebaseOptions.Builder()
+            .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+            .setDatabaseUrl("https://socially-276c0.firebaseio.com")
+            .build()
+
+        return FirebaseApp.initializeApp(options)
+    }
 
     /**
-     * Spring boot websocket starter library.
+     * Provide Firestore to spring dependency injection graph.
      */
-    const val springBootWebsocketStarter: String = "org.springframework.boot:spring-boot-starter-websocket"
+    @Bean
+    @Autowired
+    fun provideFirestore(firebaseApp: FirebaseApp): Firestore {
+        return FirestoreClient.getFirestore()
+    }
 
     /**
-     * Spring boot jackson kotlin module.
+     * Provide Firebae authentication to spring dependency injection graph.
      */
-    const val jacksonKotlinModule: String = "com.fasterxml.jackson.module:jackson-module-kotlin"
-
-    /**
-     * Spring boot test starter library.
-     */
-    const val springBootTestStarter: String = "org.springframework.boot:spring-boot-starter-test"
-
-    /**
-     * Project reactor test library.
-     */
-    const val reactorTest: String = "io.projectreactor:reactor-test"
-}
-
-/**
- * DBGram android framework dependencies.
- */
-object AndroidFrameworkDependencies {
-    /**
-     * Android gradle plugin.
-     */
-    const val androidGradlePlugin: String = "com.android.tools.build:gradle:${Configurations.androidGradlePlugin}"
-}
-
-/**
- * DBGram third party dependencies.
- */
-object ThirdPartyDependencies {
-    /**
-     * Firebase admin sdk library.
-     */
-    const val firebaseAdminSdk: String = "com.google.firebase:firebase-admin:${Configurations.firebaseAdminVersion}"
+    @Bean
+    @Autowired
+    fun provideFirebaseAuthentication(firebaseApp: FirebaseApp): FirebaseAuth = FirebaseAuth.getInstance(firebaseApp)
 }

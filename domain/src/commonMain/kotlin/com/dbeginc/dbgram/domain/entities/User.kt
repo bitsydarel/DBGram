@@ -1,5 +1,5 @@
 /*
- *  GNU GENERAL PUBLIC LICENSE
+ *                     GNU GENERAL PUBLIC LICENSE
  *                        Version 3, 29 June 2007
  *
  *  Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
@@ -653,7 +653,7 @@
  *   If the program does terminal interaction, make it output a short
  * notice like this when it starts in an interactive mode:
  *
- *     <program>  Copyright (C) <year>  <name of author>
+ *     DBGram  Copyright (C) 2018  Darel Bitsy
  *     This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
  *     This is free software, and you are welcome to redistribute it
  *     under certain conditions; type `show c' for details.
@@ -675,108 +675,17 @@
  * <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
 
-/**
- * DBGram kotlin dependencies.
- */
-object KotlinDependencies {
-    /**
-     * Kotlin gradle plugin library.
-     */
-    const val kotlinGradlePlugin: String = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Configurations.kotlinVersion}"
-
-    /**
-     * Kotlin standard common library.
-     */
-    const val kotlinStdlibCommon: String = "org.jetbrains.kotlin:kotlin-stdlib-common"
-
-    /**
-     * Kotlin test common library.
-     */
-    const val kotlinTestJvm: String = "org.jetbrains.kotlin:kotlin-test"
-
-    /**
-     * Kotlin junit test library.
-     */
-    const val kotlinTestJunitJvm: String = "org.jetbrains.kotlin:kotlin-test-junit"
-
-    /**
-     * Kotlin test common library.
-     */
-    const val kotlinTestCommon: String = "org.jetbrains.kotlin:kotlin-test-common"
-
-    /**
-     * Kotlin test annotation common library.
-     */
-    const val kotlinTestAnnotationCommon: String = "org.jetbrains.kotlin:kotlin-test-annotations-common"
-
-    /**
-     * Kotlin standard jdk 8 library.
-     */
-    const val kotlinStdlibJdk8: String = "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-
-    /**
-     * Kotlin standard jdk 7 library.
-     */
-    const val kotlinStdlibJdk7: String = "org.jetbrains.kotlin:kotlin-stdlib-jdk7"
-
-    /**
-     * Kotlin reflection library.
-     */
-    const val kotlinReflect: String = "org.jetbrains.kotlin:kotlin-reflect"
-}
+package com.dbeginc.dbgram.domain.entities
 
 /**
- * DBGram Spring dependencies.
+ * DBGram user.
+ *
+ * @param userId as unique identifier of the user.
+ * @param username of the user.
+ * @param email of the user.
  */
-object SpringDependencies {
-    /**
-     * Spring boot gradle plugin.
-     */
-    const val springBootGradlePlugin: String =
-        "org.springframework.boot:spring-boot-gradle-plugin:${Configurations.springBootVersion}"
-
-    /**
-     * Spring boot webflux starter library;
-     */
-    const val springBootWebfluxStarter: String = "org.springframework.boot:spring-boot-starter-webflux"
-
-    /**
-     * Spring boot websocket starter library.
-     */
-    const val springBootWebsocketStarter: String = "org.springframework.boot:spring-boot-starter-websocket"
-
-    /**
-     * Spring boot jackson kotlin module.
-     */
-    const val jacksonKotlinModule: String = "com.fasterxml.jackson.module:jackson-module-kotlin"
-
-    /**
-     * Spring boot test starter library.
-     */
-    const val springBootTestStarter: String = "org.springframework.boot:spring-boot-starter-test"
-
-    /**
-     * Project reactor test library.
-     */
-    const val reactorTest: String = "io.projectreactor:reactor-test"
-}
-
-/**
- * DBGram android framework dependencies.
- */
-object AndroidFrameworkDependencies {
-    /**
-     * Android gradle plugin.
-     */
-    const val androidGradlePlugin: String = "com.android.tools.build:gradle:${Configurations.androidGradlePlugin}"
-}
-
-/**
- * DBGram third party dependencies.
- */
-object ThirdPartyDependencies {
-    /**
-     * Firebase admin sdk library.
-     */
-    const val firebaseAdminSdk: String = "com.google.firebase:firebase-admin:${Configurations.firebaseAdminVersion}"
-}
+data class User(
+    val userId: Long,
+    val username: String,
+    val email: String
+)

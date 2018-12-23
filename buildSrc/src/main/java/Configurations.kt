@@ -693,4 +693,9 @@ object Configurations {
      * DBGram android gradle plugin.
      */
     const val androidGradlePlugin: String = "3.3.0-rc02"
+
+    /**
+     * DBGram firebase admin version
+     */
+    const val firebaseAdminVersion: String = "6.6.0"
 }

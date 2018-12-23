@@ -1,5 +1,5 @@
 /*
- *                     GNU GENERAL PUBLIC LICENSE
+ *  GNU GENERAL PUBLIC LICENSE
  *                        Version 3, 29 June 2007
  *
  *  Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
@@ -653,7 +653,7 @@
  *   If the program does terminal interaction, make it output a short
  * notice like this when it starts in an interactive mode:
  *
- *     DBGram  Copyright (C) 2018  Darel Bitsy
+ *     <program>  Copyright (C) <year>  <name of author>
  *     This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
  *     This is free software, and you are welcome to redistribute it
  *     under certain conditions; type `show c' for details.
@@ -675,14 +675,12 @@
  * <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
 
-package com.dbeginc.dbgram
+package com.dbeginc.dbgram.domain
 
-import kotlin.test.Test
-import kotlin.test.assertTrue
+actual class Sample {
+    actual fun checkMe() = 7
+}
 
-class SampleTestsServer {
-    @Test
-    fun testHello() {
-        assertTrue("Server" in hello())
-    }
+actual object Platform {
+    actual val name: String = "Ios"
 }
