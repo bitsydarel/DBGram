@@ -678,9 +678,36 @@
 package com.dbeginc.dbgram.domain.posts
 
 import com.dbeginc.dbgram.domain.entities.Post
+import com.dbeginc.dbgram.domain.entities.TaskResult
 
 actual class PostsRepository {
+    /**
+     * Get currently available posts.
+     */
     actual fun getPosts(): List<Post> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    /**
+     * get post by his id.
+     *
+     * @param id of the post.
+     * @return requested [Post].
+     */
+    actual fun getPostById(id: String): TaskResult {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    /**
+     * create user post.
+     *
+     * @param post to be created.
+     */
+    actual fun createPost(post: Post): TaskResult {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    actual fun deletePost(id: String): TaskResult {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

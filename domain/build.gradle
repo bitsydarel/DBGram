@@ -756,7 +756,7 @@ kotlin {
                 api(KotlinDependencies.kotlinStdlibJdk7)
             }
         }
-        
+         
         androidTest {
             dependencies {
                 api(KotlinDependencies.kotlinTestJvm)
@@ -765,10 +765,8 @@ kotlin {
         }
         
         iosMain {
-            dependsOn commonMain
         }
         iosTest {
-            dependsOn commonTest
         }
     }
 }

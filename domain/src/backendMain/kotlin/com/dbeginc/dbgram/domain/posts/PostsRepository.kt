@@ -678,11 +678,60 @@
 package com.dbeginc.dbgram.domain.posts
 
 import com.dbeginc.dbgram.domain.entities.Post
+import com.dbeginc.dbgram.domain.entities.TaskFailed
+import com.dbeginc.dbgram.domain.entities.TaskResult
+import com.dbeginc.dbgram.domain.entities.TaskSucceeded
+import com.dbeginc.dbgram.domain.exceptions.TaskFailedException
 import com.google.cloud.firestore.Firestore
+import com.google.cloud.firestore.Precondition
+import java.util.concurrent.ExecutionException
 
 actual class PostsRepository(private val firestore: Firestore) {
+    companion object {
+        private const val POSTS_DB_PATH: String = "posts"
+    }
 
     actual fun getPosts(): List<Post> {
-        return firestore.collection("posts").get().get().toObjects(Post::class.java)
+        return firestore.collection(POSTS_DB_PATH).get().get().toObjects(Post::class.java)
+    }
+
+    /**
+     * get post by his id.
+     *
+     * @param id of the post.
+     * @return requested [Post].
+     */
+    actual fun getPostById(id: String): TaskResult {
+        val documentSnapshot = firestore.collection(POSTS_DB_PATH).document(id).get().get()
+        return if (documentSnapshot.exists()) {
+            TaskSucceeded(documentSnapshot.toObject(Post::class.java))
+        } else {
+            TaskFailed("Post with id $id not found")
+        }
+    }
+
+    /**
+     * create user post.
+     *
+     * @param post to be created.
+     */
+    actual fun createPost(post: Post): TaskResult {
+        println(post)
+        val documentReference = firestore.collection(POSTS_DB_PATH).document()
+        val future = documentReference.set(post.copy(postId = documentReference.id))
+        return try {
+            TaskSucceeded(future.get())
+        } catch (ee: ExecutionException) {
+            TaskFailed(ee.message ?: ee::class.java.simpleName)
+        }
+    }
+
+    actual fun deletePost(id: String): TaskResult {
+        return try {
+            firestore.collection(POSTS_DB_PATH).document(id).delete().get()
+            TaskSucceeded(Unit)
+        } catch (ee: ExecutionException) {
+            TaskFailed(ee.message ?: ee::class.java.simpleName)
+        }
     }
 }

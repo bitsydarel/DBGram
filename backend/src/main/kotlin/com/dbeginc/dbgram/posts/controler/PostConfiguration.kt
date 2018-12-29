@@ -683,6 +683,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.MediaType
+import org.springframework.web.reactive.function.server.HandlerFunction
 import org.springframework.web.reactive.function.server.RequestPredicates
 import org.springframework.web.reactive.function.server.RouterFunction
 import org.springframework.web.reactive.function.server.RouterFunctions
@@ -697,17 +698,26 @@ class PostConfiguration {
 
     @Bean
     @Autowired
-    fun routeRequests(restController: PostRestController): RouterFunction<ServerResponse> {
+    fun routeRequests(restController: PostRestController): RouterFunction<out ServerResponse> {
         return RouterFunctions.nest(
             RequestPredicates.path("/api").and(RequestPredicates.accept(MediaType.APPLICATION_JSON)),
             postsApiRouterFunctions(restController)
         )
     }
 
-    private fun postsApiRouterFunctions(restController: PostRestController): RouterFunction<ServerResponse> {
+    private fun postsApiRouterFunctions(restController: PostRestController): RouterFunction<*> {
         return RouterFunctions.route(
             RequestPredicates.GET("/posts"),
-            restController.getPosts()
+            HandlerFunction(restController::getPosts)
+        ).andRoute(
+            RequestPredicates.POST("/posts"),
+            HandlerFunction(restController::createPost)
+        ).andRoute(
+            RequestPredicates.GET("/posts/{postId}"),
+            HandlerFunction(restController::getPostById)
+        ).andRoute(
+            RequestPredicates.DELETE("/posts/{postId}"),
+            HandlerFunction(restController::deletePost)
         )
     }
 }

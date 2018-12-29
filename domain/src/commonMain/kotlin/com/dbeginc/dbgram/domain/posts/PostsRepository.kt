@@ -678,7 +678,33 @@
 package com.dbeginc.dbgram.domain.posts
 
 import com.dbeginc.dbgram.domain.entities.Post
+import com.dbeginc.dbgram.domain.entities.TaskResult
 
+/**
+ * DBGram Posts repository.
+ *
+ * provide method to interact with user's [Post]
+ */
 expect class PostsRepository {
+    /**
+     * Get currently available posts.
+     */
     fun getPosts(): List<Post>
+
+    /**
+     * get post by his id.
+     *
+     * @param id of the post.
+     * @return requested [Post].
+     */
+    fun getPostById(id: String): TaskResult
+
+    /**
+     * create user post.
+     *
+     * @param post to be created.
+     */
+    fun createPost(post: Post): TaskResult
+
+    fun deletePost(id: String): TaskResult
 }

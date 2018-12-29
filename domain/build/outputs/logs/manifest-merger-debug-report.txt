@@ -4,7 +4,7 @@ ADDED from /Users/darelbitsy/IdeaProjects/DBGram/domain/src/androidMain/AndroidM
 INJECTED from /Users/darelbitsy/IdeaProjects/DBGram/domain/src/androidMain/AndroidManifest.xml:1:1-5:12
 INJECTED from /Users/darelbitsy/IdeaProjects/DBGram/domain/src/androidMain/AndroidManifest.xml:1:1-5:12
 	package
-		ADDED from /Users/darelbitsy/IdeaProjects/DBGram/domain/src/androidMain/AndroidManifest.xml:2:9-37
+		ADDED from /Users/darelbitsy/IdeaProjects/DBGram/domain/src/androidMain/AndroidManifest.xml:2:9-44
 		INJECTED from /Users/darelbitsy/IdeaProjects/DBGram/domain/src/androidMain/AndroidManifest.xml
 		INJECTED from /Users/darelbitsy/IdeaProjects/DBGram/domain/src/androidMain/AndroidManifest.xml
 	xmlns:android

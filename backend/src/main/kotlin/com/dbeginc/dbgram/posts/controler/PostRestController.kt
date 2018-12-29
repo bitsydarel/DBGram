@@ -678,18 +678,81 @@
 package com.dbeginc.dbgram.posts.controler
 
 import com.dbeginc.dbgram.domain.entities.Post
+import com.dbeginc.dbgram.domain.entities.TaskFailed
+import com.dbeginc.dbgram.domain.entities.TaskResult
+import com.dbeginc.dbgram.domain.entities.TaskSucceeded
+import com.dbeginc.dbgram.domain.exceptions.TaskFailedException
 import com.dbeginc.dbgram.domain.posts.PostsRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
+import org.springframework.web.reactive.function.BodyExtractors
+import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.server.HandlerFunction
+import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
+import reactor.core.publisher.Mono
 import reactor.core.publisher.toFlux
+import reactor.core.publisher.toMono
+import java.util.function.Function
 
+/**
+ * DBGram spring posts controller.
+ *
+ * contains handler function for different business logic.
+ *
+ * @param postsRepository to interact with [Post]
+ */
 @Component
 class PostRestController @Autowired constructor(private val postsRepository: PostsRepository) {
-    fun getPosts(): HandlerFunction<ServerResponse> {
-        return HandlerFunction<ServerResponse> {
-            ServerResponse.ok().body(postsRepository.getPosts().toFlux(), Post::class.java)
-        }
+    fun getPosts(request: ServerRequest): Mono<ServerResponse> {
+        return ServerResponse.ok().body(postsRepository.getPosts().toFlux(), Post::class.java)
+    }
+
+    fun getPostById(request: ServerRequest): Mono<ServerResponse> {
+        return request.toMono()
+            .map { it.pathVariable("postId") }
+            .map(postsRepository::getPostById)
+            .flatMap { taskResult ->
+                when (taskResult) {
+                    is TaskSucceeded<*> -> ServerResponse.ok()
+                        .body(BodyInserters.fromObject(taskResult.result!!))
+                    is TaskFailed -> ServerResponse.status(HttpStatus.NOT_FOUND)
+                        .body(BodyInserters.fromObject(taskResult))
+                }
+            }
+            .onErrorResume { error ->
+                ServerResponse.badRequest()
+                    .body(BodyInserters.fromObject(TaskFailed(error.message ?: error::class.java.simpleName)))
+            }
+    }
+
+    fun createPost(request: ServerRequest): Mono<ServerResponse> {
+        return request.bodyToMono(Post::class.java)
+            .map(postsRepository::createPost)
+            .flatMap { result ->
+                if (result is TaskSucceeded<*>) {
+                    ServerResponse.ok().build()
+                } else {
+                    ServerResponse.badRequest().body(BodyInserters.fromObject(result))
+                }
+            }.onErrorResume { error ->
+                ServerResponse.badRequest()
+                    .body(BodyInserters.fromObject(TaskFailed(error.message ?: error::class.java.simpleName)))
+            }
+    }
+
+    fun deletePost(request: ServerRequest): Mono<ServerResponse> {
+        return request.toMono().map { it.pathVariable("postId") }
+            .flatMap { postId ->
+                if (postId.isBlank()) ServerResponse.notFound().build()
+                else ServerResponse.ok().body(
+                    BodyInserters.fromObject(postsRepository.deletePost(postId))
+                )
+            }.onErrorResume { error ->
+                ServerResponse.badRequest()
+                    .body(BodyInserters.fromObject(TaskFailed(error.message ?: error::class.java.simpleName)))
+            }
     }
 }
