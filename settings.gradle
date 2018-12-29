@@ -13,3 +13,12 @@ enableFeaturePreview("GRADLE_METADATA")
 rootProject.name = 'DBGram'
 
 include ':domain', ':android-app', ':backend'
+
+buildCache {
+    local(DirectoryBuildCache) {
+        directory = new File(rootDir, 'dbgram-build-cache')
+        enabled true
+        push true
+        removeUnusedEntriesAfterDays = 7
+    }
+}
