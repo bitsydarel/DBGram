@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:/Users/darelbitsy/IdeaProjects/DBGram/dbgram-ios/dbgram-ioa.xcodeproj">
+      location = "self:dbgram-ios.xcodeproj">
    </FileRef>
 </Workspace>

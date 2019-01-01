@@ -1,9 +1,9 @@
 //
 //  AppDelegate.swift
-//  dbgram
+//  dbgram-ios
 //
-//  Created by darel bitsy on 12/22/18.
-//  Copyright © 2018 dbeginc. All rights reserved.
+//  Created by darel bitsy on 1/1/19.
+//  Copyright © 2019 dbeginc. All rights reserved.
 //
 
 import UIKit

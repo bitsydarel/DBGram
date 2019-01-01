@@ -1,14 +1,14 @@
 //
-//  dbgramUITests.swift
-//  dbgramUITests
+//  dbgram_iosUITests.swift
+//  dbgram-iosUITests
 //
-//  Created by darel bitsy on 12/22/18.
-//  Copyright © 2018 dbeginc. All rights reserved.
+//  Created by darel bitsy on 1/1/19.
+//  Copyright © 2019 dbeginc. All rights reserved.
 //
 
 import XCTest
 
-class dbgramUITests: XCTestCase {
+class dbgram_iosUITests: XCTestCase {
 
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
