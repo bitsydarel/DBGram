@@ -679,23 +679,17 @@ package com.dbeginc.dbgram.posts.controler
 
 import com.dbeginc.dbgram.domain.entities.Post
 import com.dbeginc.dbgram.domain.entities.TaskFailed
-import com.dbeginc.dbgram.domain.entities.TaskResult
 import com.dbeginc.dbgram.domain.entities.TaskSucceeded
-import com.dbeginc.dbgram.domain.exceptions.TaskFailedException
 import com.dbeginc.dbgram.domain.posts.PostsRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
-import org.springframework.web.reactive.function.BodyExtractors
 import org.springframework.web.reactive.function.BodyInserters
-import org.springframework.web.reactive.function.server.HandlerFunction
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
 import reactor.core.publisher.Mono
 import reactor.core.publisher.toFlux
 import reactor.core.publisher.toMono
-import java.util.function.Function
 
 /**
  * DBGram spring posts controller.
@@ -730,6 +724,9 @@ class PostRestController @Autowired constructor(private val postsRepository: Pos
 
     fun createPost(request: ServerRequest): Mono<ServerResponse> {
         return request.bodyToMono(Post::class.java)
+            .onErrorResume { error ->
+                Mono.error(RuntimeException(error))
+            }
             .map(postsRepository::createPost)
             .flatMap { result ->
                 if (result is TaskSucceeded<*>) {

@@ -15,6 +15,8 @@
 		7C3A9C5221DB8F8F00D63A51 /* dbgram_iosTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3A9C5121DB8F8F00D63A51 /* dbgram_iosTests.swift */; };
 		7C3A9C5D21DB8F8F00D63A51 /* dbgram_iosUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3A9C5C21DB8F8F00D63A51 /* dbgram_iosUITests.swift */; };
 		7C3A9C6B21DB918A00D63A51 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 7C3A9C6A21DB918A00D63A51 /* Config.xcconfig */; };
+		7C3A9C6E21DBD21F00D63A51 /* domain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C3A9C6D21DBD21F00D63A51 /* domain.framework */; };
+		7C3A9C6F21DBD21F00D63A51 /* domain.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7C3A9C6D21DBD21F00D63A51 /* domain.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +36,20 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		7C3A9C7021DBD21F00D63A51 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				7C3A9C6F21DBD21F00D63A51 /* domain.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		7C3A9C3921DB8F8E00D63A51 /* dbgram-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "dbgram-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C3A9C3C21DB8F8E00D63A51 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -49,6 +65,7 @@
 		7C3A9C5C21DB8F8F00D63A51 /* dbgram_iosUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dbgram_iosUITests.swift; sourceTree = "<group>"; };
 		7C3A9C5E21DB8F8F00D63A51 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7C3A9C6A21DB918A00D63A51 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		7C3A9C6D21DBD21F00D63A51 /* domain.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = domain.framework; path = "../domain/build/xcode-frameworks/domain.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C3A9C6E21DBD21F00D63A51 /* domain.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,6 +97,7 @@
 		7C3A9C3021DB8F8E00D63A51 = {
 			isa = PBXGroup;
 			children = (
+				7C3A9C6D21DBD21F00D63A51 /* domain.framework */,
 				7C3A9C6A21DB918A00D63A51 /* Config.xcconfig */,
 				7C3A9C3B21DB8F8E00D63A51 /* dbgram-ios */,
 				7C3A9C5021DB8F8F00D63A51 /* dbgram-iosTests */,
@@ -139,6 +158,7 @@
 				7C3A9C3621DB8F8E00D63A51 /* Frameworks */,
 				7C3A9C3721DB8F8E00D63A51 /* Resources */,
 				7C3A9C6C21DB91C600D63A51 /* Add DBGram Kotlin Common Framework */,
+				7C3A9C7021DBD21F00D63A51 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -340,6 +360,7 @@
 /* Begin XCBuildConfiguration section */
 		7C3A9C5F21DB8F8F00D63A51 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7C3A9C6A21DB918A00D63A51 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -456,6 +477,7 @@
 		};
 		7C3A9C6221DB8F8F00D63A51 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7C3A9C6A21DB918A00D63A51 /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -492,6 +514,7 @@
 		};
 		7C3A9C6521DB8F8F00D63A51 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7C3A9C6A21DB918A00D63A51 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -534,6 +557,7 @@
 		};
 		7C3A9C6821DB8F8F00D63A51 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7C3A9C6A21DB918A00D63A51 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;

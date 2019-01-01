@@ -7,12 +7,15 @@
 //
 
 import UIKit
+import domain
 
 class ViewController: UIViewController {
-
+    @IBOutlet weak var sampletext: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        sampletext.text = SampleKt.hello()
     }
 
 
