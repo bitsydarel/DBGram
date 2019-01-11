@@ -677,13 +677,15 @@
 
 package com.dbeginc.dbgram.domain.posts
 
-import com.dbeginc.dbgram.domain.entities.Post
 import com.dbeginc.dbgram.domain.entities.TaskFailed
 import com.dbeginc.dbgram.domain.entities.TaskResult
 import com.dbeginc.dbgram.domain.entities.TaskSucceeded
-import com.dbeginc.dbgram.domain.exceptions.TaskFailedException
+import com.dbeginc.dbgram.domain.posts.entities.Post
 import com.google.cloud.firestore.Firestore
-import com.google.cloud.firestore.Precondition
+import java.time.ZoneId
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.util.concurrent.ExecutionException
 
 actual class PostsRepository(private val firestore: Firestore) {
@@ -691,8 +693,15 @@ actual class PostsRepository(private val firestore: Firestore) {
         private const val POSTS_DB_PATH: String = "posts"
     }
 
-    actual fun getPosts(): List<Post> {
-        return firestore.collection(POSTS_DB_PATH).get().get().toObjects(Post::class.java)
+    actual fun getPosts(): TaskResult {
+        return try {
+            val posts = firestore.collection(POSTS_DB_PATH)
+                .get().get()
+                .toObjects(Post::class.java)
+            TaskSucceeded(posts)
+        } catch (e: Exception) {
+            TaskFailed(reason = e.cause?.message ?: e.message ?: e::class.java.simpleName)
+        }
     }
 
     /**
@@ -718,18 +727,36 @@ actual class PostsRepository(private val firestore: Firestore) {
     actual fun createPost(post: Post): TaskResult {
         println(post)
         val documentReference = firestore.collection(POSTS_DB_PATH).document()
-        val future = documentReference.set(post.copy(postId = documentReference.id))
+        val future = documentReference.set(
+            post.copy(postId = documentReference.id)
+        )
         return try {
-            TaskSucceeded(future.get())
+            future.get()
+                .let { documentReference.get().get() }
+                .let { documentSnapshot ->
+                    val createdPost = documentSnapshot.toObject(Post::class.java)
+                    if (createdPost != null) {
+                        val creationInstant = documentSnapshot.createTime!!.toDate().toInstant()
+                        val creationTimeInMillis = ZonedDateTime.ofInstant(
+                            creationInstant,
+                            ZoneId.of(ZoneOffset.UTC.id)
+                        )
+                        val creationTimeFormatted = creationTimeInMillis.format(DateTimeFormatter.ISO_ZONED_DATE_TIME)
+                        documentReference.update(Post::creationTime.name, creationTimeFormatted)
+                        TaskSucceeded(createdPost.copy(creationTime = creationTimeFormatted))
+                    } else {
+                        TaskFailed(reason = "Issue while creation the post $createdPost")
+                    }
+                }
         } catch (ee: ExecutionException) {
-            TaskFailed(ee.message ?: ee::class.java.simpleName)
+            TaskFailed(ee.cause?.message ?: ee.message ?: ee::class.java.simpleName)
         }
     }
 
     actual fun deletePost(id: String): TaskResult {
         return try {
             firestore.collection(POSTS_DB_PATH).document(id).delete().get()
-            TaskSucceeded(Unit)
+            TaskSucceeded(id)
         } catch (ee: ExecutionException) {
             TaskFailed(ee.message ?: ee::class.java.simpleName)
         }

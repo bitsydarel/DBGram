@@ -675,18 +675,21 @@
  * <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
 
-package com.dbeginc.dbgram.domain.entities
+package com.dbeginc.dbgram.domain.posts.entities
 
 /**
  * DBGram User's post.
  *
  * @param userId of the owner of this post.
+ * @param postId of this post.
+ * @param creationTime of this post in utc.
  * @param title of this post.
  * @param content of this post.
  */
 data class Post(
     val userId: String = "INVALID_USER_ID",
     val postId: String? = null,
+    val creationTime: String = "",
     val title: String = "",
     val content: String = ""
 )

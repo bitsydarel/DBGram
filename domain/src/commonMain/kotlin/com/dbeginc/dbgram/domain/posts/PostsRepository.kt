@@ -677,8 +677,8 @@
 
 package com.dbeginc.dbgram.domain.posts
 
-import com.dbeginc.dbgram.domain.entities.Post
 import com.dbeginc.dbgram.domain.entities.TaskResult
+import com.dbeginc.dbgram.domain.posts.entities.Post
 
 /**
  * DBGram Posts repository.
@@ -688,14 +688,17 @@ import com.dbeginc.dbgram.domain.entities.TaskResult
 expect class PostsRepository {
     /**
      * Get currently available posts.
+     *
+     * @return [TaskResult] containing the currently available posts or the error occurred during the execution of the task.
      */
-    fun getPosts(): List<Post>
+    fun getPosts(): TaskResult
 
     /**
-     * get post by his id.
+     * get a post by his id.
      *
      * @param id of the post.
-     * @return requested [Post].
+     *
+     * @return [TaskResult] containing the requested [Post] or the error occurred during the execution of the task.
      */
     fun getPostById(id: String): TaskResult
 
@@ -703,8 +706,18 @@ expect class PostsRepository {
      * create user post.
      *
      * @param post to be created.
+     *
+     * @return [TaskResult] containing the created [Post] or the error occurred during the execution of the task.
      */
     fun createPost(post: Post): TaskResult
 
+    /**
+     * Delete a post by id.
+     *
+     * @param id of the post to be deleted.
+     *
+     * @return [TaskResult] which can contain either a success with id of the deleted post,
+     * either the error occurred during the execution of the task.
+     */
     fun deletePost(id: String): TaskResult
 }

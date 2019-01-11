@@ -677,11 +677,11 @@
 
 package com.dbeginc.dbgram.domain.posts
 
-import com.dbeginc.dbgram.domain.entities.Post
 import com.dbeginc.dbgram.domain.entities.TaskResult
+import com.dbeginc.dbgram.domain.posts.entities.Post
 
 actual class PostsRepository {
-    actual fun getPosts(): List<Post> {
+    actual fun getPosts(): TaskResult {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

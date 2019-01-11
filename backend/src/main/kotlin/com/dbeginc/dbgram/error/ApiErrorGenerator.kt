@@ -675,93 +675,27 @@
  * <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
 
-package com.dbeginc.dbgram.posts.controler
+package com.dbeginc.dbgram.error
 
 import com.dbeginc.dbgram.domain.entities.TaskFailed
-import com.dbeginc.dbgram.domain.entities.TaskSucceeded
-import com.dbeginc.dbgram.domain.posts.PostsRepository
-import com.dbeginc.dbgram.domain.posts.entities.Post
-import com.dbeginc.dbgram.domain.utils.castTo
-import com.dbeginc.dbgram.error.onInvalidBody
-import com.dbeginc.dbgram.error.onMissingRequestDependency
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpStatus
-import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.BodyInserters
-import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
 import reactor.core.publisher.Mono
-import reactor.core.publisher.toMono
 
-/**
- * DBGram spring posts controller.
- *
- * contains handler function for different business logic.
- *
- * @param postsRepository to interact with [Post]
- */
-@Component
-class PostRestController @Autowired constructor(private val postsRepository: PostsRepository) {
-    fun getPosts(request: ServerRequest): Mono<ServerResponse> {
-        return request.toMono()
-            .map { postsRepository.getPosts() }
-            .flatMap { result ->
-                when (result) {
-                    is TaskSucceeded<*> -> ServerResponse.ok().body(BodyInserters.fromObject(result.result!!))
-                    is TaskFailed -> ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                        BodyInserters.fromObject(request)
-                    )
-                }
-            }
-    }
+fun onInvalidBody(error: Throwable? = null): Mono<ServerResponse> {
+    return ServerResponse.unprocessableEntity()
+        .body(
+            BodyInserters.fromObject(
+                TaskFailed(error?.cause?.message ?: "Invalid body received")
+            )
+        )
+}
 
-    fun getPostById(request: ServerRequest): Mono<ServerResponse> {
-        return request.toMono()
-            .map { it.pathVariable("postId") }
-            .map(postsRepository::getPostById)
-            .flatMap { taskResult ->
-                when (taskResult) {
-                    is TaskSucceeded<*> -> ServerResponse.ok()
-                        .body(BodyInserters.fromObject(taskResult.result!!))
-                    is TaskFailed -> ServerResponse.status(HttpStatus.NOT_FOUND)
-                        .body(BodyInserters.fromObject(taskResult))
-                }
-            }
-            .onErrorResume { error ->
-                ServerResponse.badRequest()
-                    .body(BodyInserters.fromObject(TaskFailed(error.message ?: error::class.java.simpleName)))
-            }
-    }
-
-    fun createPost(request: ServerRequest): Mono<ServerResponse> {
-        return request.bodyToMono(Post::class.java)
-            .map(postsRepository::createPost)
-            .flatMap { result ->
-                if (result is TaskSucceeded<*>) {
-                    ServerResponse.ok().body(
-                        BodyInserters.fromObject(result.result?.castTo<Post>() ?: result)
-                    )
-                } else {
-                    ServerResponse.badRequest()
-                        .body(BodyInserters.fromObject(result))
-                }
-            }
-            .switchIfEmpty(onInvalidBody())
-            .onErrorResume(::onMissingRequestDependency)
-    }
-
-    fun deletePost(request: ServerRequest): Mono<ServerResponse> {
-        return request.toMono()
-            .map { it.pathVariable("postId") }
-            .flatMap { postId ->
-                if (postId.isBlank()) {
-                    ServerResponse.notFound().build()
-                } else {
-                    ServerResponse.ok().body(
-                        BodyInserters.fromObject(postsRepository.deletePost(postId))
-                    )
-                }
-            }
-            .onErrorResume(::onMissingRequestDependency)
-    }
+fun onMissingRequestDependency(error: Throwable? = null): Mono<ServerResponse> {
+    return ServerResponse.unprocessableEntity()
+        .body(
+            BodyInserters.fromObject(
+                TaskFailed(error?.cause?.message ?: "Missing request dependency, please verify your request")
+            )
+        )
 }
